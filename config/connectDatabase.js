@@ -1,5 +1,5 @@
-const mongoose = require('mongoose')
-const { black, bgCyan, bgBlack } = require('colorette')
+import mongoose from 'mongoose'
+import { black, bgCyan, bgBlack } from 'colorette'
 
 const connectDatabase = () => {
     mongoose
@@ -14,4 +14,4 @@ const connectDatabase = () => {
         })
 }
 
-module.exports = { connectDatabase }
+export default connectDatabase

@@ -1,30 +1,37 @@
 //? Packages Import ⬇️
-const express = require('express')
-const dotenv = require('dotenv').config()
-const mongoose = require('mongoose')
-const cors = require('cors')
-const cookieParser = require('cookie-parser')
-const { bgWhite, black } = require('colorette')
+import express from 'express'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import cors from 'cors'
+import cookieParser from 'cookie-parser'
+import { bgWhite, black } from 'colorette'
 
-//? Files Import ⬇️
-const { connectDatabase } = require('./config/connectDatabase')
-const userRoutes = require('./Routes/userRoutes')
+// Files Import
+import connectDatabase from './config/connectDatabase.js'
+import userRoutes from './Routes/userRoutes.js'
+import authRoutes from './Routes/authRoutes.js'
+import { verifyToken } from './middlewares/auth.js'
 
-
-// ? Middleware configurations ⬇️
+// Middleware configurations
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+dotenv.config()
 const app = express()
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
 
-// ? Connect Database ⬇️
+// Connect Database
 connectDatabase()
 
-// ? Routes ⬇️
+// Routes
 app.get('/', async (req, res) => {
     res.status(200).json({ success: true, message: 'Hello World!' })
 })
 
+app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 
 // ? Server Listening to port ⬇️

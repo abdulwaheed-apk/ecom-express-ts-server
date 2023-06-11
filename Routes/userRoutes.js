@@ -1,12 +1,11 @@
-const { signUp, signIn, updateProfile, deleteProfile } = require('../Controllers/userController')
+import express from 'express'
+import { updateProfile, deleteProfile } from '../Controllers/userController.js'
+import { verifyToken } from '../middlewares/auth.js'
 
-const router = require('express').Router()
+const router = express.Router()
 
-//@access public
-router.post('/sign-up', signUp)
-router.post('/sign-in', signIn)
 //@access private
-router.put('/update-profile', updateProfile)
+router.patch('/update-profile', verifyToken, updateProfile)
 router.delete('/delete-profile', deleteProfile)
 
-module.exports = router
+export default router
