@@ -1,10 +1,11 @@
+import { Request, Response } from 'express'
 import bcrypt from 'bcrypt'
-import User from '../Models/userModel.js'
+import User from '../Models/userModel'
 
 //@route /api/users/sign-up
 //@desc POST To sign up
 //@access public
-export const signUp = async (req, res) => {
+export const signUp = async (req:Request, res:Response) => {
     const { name, email, password, userName } = req.body
 
     if (!name || !email || !password || !userName) {
@@ -36,12 +37,13 @@ export const signUp = async (req, res) => {
             userData: await user,
         })
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message })
+        const err  = error as Error
+        res.status(500).json({ success: false, message: err.message })
     }
 }
 //@route /api/users/sign-in
 //@desc POST To sign in
 //@access public
-export const signIn = async (req, res) => {
+export const signIn = async (req:Request, res:Response) => {
     res.status(200).json({ success: true, message: 'Sign In', ...req.body })
 }

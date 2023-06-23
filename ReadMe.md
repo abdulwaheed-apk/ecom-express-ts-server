@@ -19,13 +19,13 @@ pnpm install
 
 > Third: Run Server
 ```
- npm run server
+ npm run serve
 ```
 or 
 ```
-yarn server
+yarn serve
  ```
 or 
 ```
-pnpm run server
+pnpm run serve
  ```
