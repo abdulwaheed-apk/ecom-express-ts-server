@@ -1,7 +1,7 @@
-import express, {Router} from 'express'
-import { signUp, signIn } from '../Controllers/authController'
+import express, { Router } from 'express'
+import { signUp, signIn } from '../controllers/authController'
 
-const router:Router = express.Router()
+const router: Router = express.Router()
 
 //@access public
 router.post('/sign-up', signUp)

@@ -1,4 +1,4 @@
-import express, {Express, Request, Response} from 'express'
+import express, { Express, Request, Response } from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import path from 'path'
@@ -9,8 +9,8 @@ import { bgWhite, black } from 'colorette'
 
 // Files Import
 import connectDatabase from './config/connectDatabase'
-import userRoutes from './Routes/userRoutes'
-import authRoutes from './Routes/authRoutes'
+import userRoutes from './routes/userRoutes'
+import authRoutes from './routes/authRoutes'
 import { verifyToken } from './middlewares/auth'
 
 // Middleware configurations
@@ -26,13 +26,22 @@ app.use(cookieParser())
 connectDatabase()
 
 // Routes
-app.get('/', async (req:Request, res: Response) => {
-    res.status(200).json({ success: true, message: 'Hello World!', techStack:[ { language: "TypeScript" }, {framework: "Express" }, {database: "MongoDB" }, {odm: "Mongoose" }, {auth: "JWT" }] })
+app.get('/', async (req: Request, res: Response) => {
+    res.status(200).json({
+        success: true,
+        message: 'Hello World!',
+        techStack: [
+            { language: 'TypeScript' },
+            { framework: 'Express' },
+            { database: 'MongoDB' },
+            { odm: 'Mongoose' },
+            { auth: 'JWT' },
+        ],
+    })
 })
 
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
-
 
 const port = process.env.PORT || 8000
 app.listen(port, () => {
