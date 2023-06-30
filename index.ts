@@ -12,6 +12,7 @@ import connectDatabase from './config/connectDatabase'
 import userRoutes from './routes/userRoutes'
 import authRoutes from './routes/authRoutes'
 import { verifyToken } from './middlewares/auth'
+import env from './config/envConfig'
 
 // Middleware configurations
 // const __filename = fileURLToPath(import.meta.url)
@@ -43,7 +44,7 @@ app.get('/', async (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes)
 app.use('/api/users', userRoutes)
 
-const port = process.env.PORT || 8000
+const port = env.PORT || 8000
 app.listen(port, () => {
     console.log(bgWhite(black(`Server running at http://localhost:${port}`)))
 })
