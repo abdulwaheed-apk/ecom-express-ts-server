@@ -4,7 +4,7 @@ interface ProductValidationErrors {
     [key: string]: string
 }
 
-const validateProductInput = (
+const productUpdateInput = (
     req: Request,
     res: Response,
     next: NextFunction
@@ -18,52 +18,47 @@ const validateProductInput = (
         stock,
         images,
         features,
-        averageRating,
     } = req.body
 
     const errors: ProductValidationErrors = {}
 
-    if (!title || typeof title !== 'string') {
+    if (typeof title !== 'string') {
         errors.title = 'Title is required and must be a string.'
     }
 
-    if (!description || typeof description !== 'string') {
+    if (typeof description !== 'string') {
         errors.description = 'Description is required and must be a string.'
     }
 
-    if (!price || typeof price !== 'number' || price <= 0) {
+    if (typeof price !== 'number' || price <= 0) {
         errors.price = 'Price is required and must be a positive number.'
     }
 
-    if (!category || typeof category !== 'string') {
+    if (typeof category !== 'string') {
         errors.category = 'Category is required and must be a string.'
     }
 
-    if (!brand || typeof brand !== 'string') {
+    if (typeof brand !== 'string') {
         errors.brand = 'Brand is required and must be a string.'
     }
 
-    if (!stock || typeof stock !== 'number' || stock < 0) {
+    if (typeof stock !== 'number' || stock < 0) {
         errors.stock = 'Stock is required and must be a non-negative number.'
     }
 
     if (
-        !Array.isArray(images) ||
-        images.some((image) => typeof image !== 'string')
+        Array.isArray(images) ||
+        images.some((image?: string) => typeof image !== 'string')
     ) {
         errors.images = 'Images are required and must be an array of strings.'
     }
 
     if (
-        !Array.isArray(features) ||
-        features.some((feature) => typeof feature !== 'string')
+        Array.isArray(features) ||
+        features.some((feature?: string) => typeof feature !== 'string')
     ) {
         errors.features =
             'Features are required and must be an array of strings.'
-    }
-
-    if (averageRating && typeof averageRating !== 'number') {
-        errors.averageRating = 'Average rating must be a number.'
     }
 
     if (Object.keys(errors).length > 0) {
@@ -73,4 +68,4 @@ const validateProductInput = (
     next()
 }
 
-export default validateProductInput
+export default productUpdateInput
