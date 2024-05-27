@@ -5,7 +5,7 @@ import {
     deleteProduct,
     updateProduct,
 } from '../controllers/productController'
-import { verifyToken } from '../middlewares/auth'
+import { verifyToken } from '../middlewares/authMiddleware'
 import validateProductInput from '../middlewares/productValidation'
 import productUpdateInput from '../middlewares/productUpdateInput'
 

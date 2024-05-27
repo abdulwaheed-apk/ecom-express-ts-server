@@ -6,46 +6,58 @@ import { fileURLToPath } from 'url'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import { bgWhite, black } from 'colorette'
+import morgan from "morgan";
 
-// Files Import
-import connectDatabase from './config/connectDatabase'
+// Routes
 import userRoutes from './routes/userRoutes'
 import authRoutes from './routes/authRoutes'
 import productRoutes from './routes/productRoutes'
-import { verifyToken } from './middlewares/auth'
+import { verifyToken } from './middlewares/authMiddleware'
 import env from './config/envConfig'
+import connectDB from './config/connectDatabase'
+//*
+// import { notFound, errorHandler } from "./middleware/errorMiddleware";
+// import orderRoutes from "./routes/orderRoutes";
+// import paypalRoutes from "./routes/paypalRoutes";
+// import uploadRoutes from "./routes/uploadRoutes";
 
-// Middleware configurations
-// const __filename = fileURLToPath(import.meta.url)
-// const __dirname = path.dirname(__filename)
+//*
 dotenv.config()
 const app: Express = express()
+// Middleware to accept JSON in body
 app.use(express.json())
+// Morgan logging
+app.use(morgan("dev"));
+
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
 app.use(cookieParser())
 
 // Connect Database
-connectDatabase()
+connectDB()
 
 // Routes
 app.get('/', async (req: Request, res: Response) => {
-    res.status(200).json({
-        success: true,
-        message: 'Hello World!',
-        techStack: [
-            { language: 'TypeScript' },
-            { framework: 'Express' },
-            { database: 'MongoDB' },
-            { odm: 'Mongoose' },
-            { auth: 'JWT' },
-        ],
-    })
+    res.send("API IS RUNNING...");
 })
 
-app.use('/api/auth', authRoutes)
-app.use('/api/users', verifyToken, userRoutes)
-app.use('/api/products', verifyToken, productRoutes)
+// app.use('/api/auth', authRoutes)
+// app.use('/api/users', verifyToken, userRoutes)
+// app.use('/api/products', verifyToken, productRoutes)
+
+app.use("/api/products/", productRoutes);
+app.use("/api/users/", userRoutes);
+// app.use("/api/orders/", orderRoutes);
+// app.use("/api/config/paypal", paypalRoutes);
+// app.use("/api/upload", uploadRoutes);
+
+// Make uploads folder static
+// const __dirname = path.resolve();
+// app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
+// Use Middleware
+// app.use(notFound);
+// app.use(errorHandler);
 
 const port = env.PORT || 8000
 app.listen(port, () => {

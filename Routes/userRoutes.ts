@@ -4,7 +4,7 @@ import {
     deleteProfile,
     getAllUsers,
 } from '../controllers/userController'
-import { verifyToken } from '../middlewares/auth'
+import { verifyToken } from '../middlewares/authMiddleware'
 
 const router: Router = Router()
 

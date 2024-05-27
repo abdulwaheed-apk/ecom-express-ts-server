@@ -1,39 +1,41 @@
-import { Schema, model, Document, Types, Model, SchemaOptions } from 'mongoose'
-import crypto from 'crypto'
+import { model, Schema } from "mongoose";
+import { ProductDocument } from "../types/";
 
-interface Product extends Document {
-    title: string
-    description: string
-    price: number
-    category: string
-    brand: string
-    stock: number
-    images: string[]
-    features: string[]
-    averageRating?: number
-    sku: string
-    userId: Types.ObjectId
-}
-
-const productSchemaOptions: SchemaOptions<Product> = {
-    timestamps: true,
-}
-
-const productSchema: Schema<Product> = new Schema<Product>(
+const reviewSchema = new Schema(
     {
-        title: {
+        user: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "User",
+        },
+        name: {
             type: String,
             required: true,
         },
-        description: {
-            type: String,
-            required: true,
-        },
-        price: {
+        rating: {
             type: Number,
             required: true,
         },
-        category: {
+        comment: {
+            type: String,
+            required: true,
+        },
+    },
+    { timestamps: true }
+);
+
+const productSchema = new Schema(
+    {
+        user: {
+            type: Schema.Types.ObjectId,
+            required: true,
+            ref: "User",
+        },
+        name: {
+            type: String,
+            required: true,
+        },
+        image: {
             type: String,
             required: true,
         },
@@ -41,56 +43,39 @@ const productSchema: Schema<Product> = new Schema<Product>(
             type: String,
             required: true,
         },
-        stock: {
+        category: {
+            type: String,
+            required: true,
+        },
+        description: {
+            type: String,
+            required: true,
+        },
+        reviews: [reviewSchema],
+        rating: {
             type: Number,
             required: true,
+            default: 0,
         },
-        images: {
-            type: [String],
+        numReviews: {
+            type: Number,
             required: true,
+            default: 0,
         },
-        features: {
-            type: [String],
+        price: {
+            type: Number,
             required: true,
+            default: 0,
         },
-        averageRating: Number,
-        sku: {
-            type: String,
-            unique: true,
-        },
-        userId: {
-            type: Schema.Types.ObjectId,
-            ref: 'User',
+        countInStock: {
+            type: Number,
             required: true,
+            default: 0,
         },
     },
-    productSchemaOptions
-)
-
-// Pre-save hook in Mongoose to generate the SKU before saving the product to the database.
-productSchema.pre('save', async function (next) {
-    if (!this.sku) {
-        const sku = generateUniqueSku()
-        this.sku = sku
+    {
+        timestamps: true,
     }
-    next()
-})
+);
 
-function generateRandomString(length: number): string {
-    return crypto
-        .randomBytes(Math.ceil(length / 2))
-        .toString('hex')
-        .slice(0, length)
-}
-
-function generateUniqueSku(): string {
-    const timestamp: string = Date.now().toString(36) // Convert current timestamp to base36 string
-    const randomChars: string = generateRandomString(5) // Generate random alphanumeric characters
-
-    const uniqueSku: string = `${timestamp}-${randomChars}` // Combine timestamp and random characters
-    return uniqueSku
-}
-
-const ProductModel: Model<Product> = model<Product>('Product', productSchema)
-
-export default ProductModel
+export const Product = model<ProductDocument>("Product", productSchema);
